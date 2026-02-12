@@ -1,14 +1,13 @@
+
 {% extends 'base.html.twig' %}
-
 {% block title %}Product index{% endblock %}
-
 {% block body %}
     <h1>Product index</h1>
-
     <table class="table">
         <thead>
         <tr>
             <th>Id</th>
+            <th>Image</th>
             <th>Title</th>
             <th>Slug</th>
             <th>Description</th>
@@ -22,6 +21,13 @@
         {% for product in products %}
             <tr>
                 <td>{{ product.id }}</td>
+                <td>
+                    {% if product.imageFilename %}
+                        <img src="/uploads/products/{{ product.imageFilename }}" alt="{{ product.title }}" width="100">
+                    {% else %}
+                        Pas d'image
+                    {% endif %}
+                </td>
                 <td>{{ product.title }}</td>
                 <td>{{ product.slug }}</td>
                 <td>{{ product.description }}</td>
@@ -35,11 +41,11 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="9">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
     <a href="{{ path('app_product_new') }}">Create new</a>
 {% endblock %}
+
