@@ -1,7 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}page home{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>Ma page home</h1>
+    <h1>Vous êtes sur la page Home</h1>
+
+    <section>
+        <h2>Les derniers produits à -50%</h2>
+
+        <div class="d-flex gap-5 flex-wrap">
+            {% for product in products %}
+                {{ include('partials/_card.html.twig', { product }) }}
+            {% else %}
+                <p>Aucun produit trouvé.</p>
+            {% endfor %}
+        </div>
+    </section>
 {% endblock %}

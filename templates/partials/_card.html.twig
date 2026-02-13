@@ -1,0 +1,11 @@
+<div class="card" style="width: 18rem;">
+    {% if product.imageFilename %}
+        <img src="/uploads/products/{{ product.imageFilename }}" class="card-img-top" alt="{{ product.title }}">
+    {% endif %}
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{{ product.title }}</h5>
+        <p class="card-text">{{ product.description|slice(0, 80) }}{% if product.description|length > 80 %}...{% endif %}</p>
+        <p class="fw-bold">{{ product.price }} €</p>
+        <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary mt-auto">Voir le produit</a>
+    </div>
+</div>
