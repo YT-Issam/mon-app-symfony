@@ -3,14 +3,88 @@
 {% block title %}{{ product.title }}{% endblock %}
 
 {% block body %}
-    <h1>{{ product.title }}</h1>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="d-flex flex-column gap-2">
+                            {% if product.imageFilename %}
+                                <img src="/uploads/products/{{ product.imageFilename }}"
+                                     class="img-thumbnail"
+                                     alt="{{ product.title }}"
+                                     style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        {% if product.imageFilename %}
+                            <img src="/uploads/products/{{ product.imageFilename }}"
+                                 class="img-fluid rounded"
+                                 alt="{{ product.title }}"
+                                 style="width: 100%; height: 500px; object-fit: contain; background-color: #f5f5f5;">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 500px;">
+                                <span class="text-muted">Pas d'image</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
-    {% if product.imageFilename %}
-        <img src="/uploads/products/{{ product.imageFilename }}" alt="{{ product.title }}" class="img-fluid mb-3">
-    {% endif %}
+            <div class="col-lg-5">
+                <h1 class="fw-bold mb-1">{{ product.title }}</h1>
 
-    <p>{{ product.description }}</p>
-    <p class="fw-bold">Prix : {{ product.price }} €</p>
+                {% if product.category %}
+                    <p class="text-muted mb-2">{{ product.category.name }}</p>
+                {% endif %}
 
-    <a href="{{ path('app_prduct_index') }}" class="btn btn-secondary">Retour à l'accueil</a>
+                <p class="fs-4 fw-bold mb-4">{{ product.price|number_format(2, ',', ' ') }} €</p>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-semibold">Sélectionner la taille</span>
+                        <a href="#" class="text-decoration-none text-dark">Guide des tailles</a>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 38.5</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 39</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 40</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 40.5</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 41</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 42</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 42.5</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 43</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 44</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 44.5</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 45</button>
+                        <button class="btn btn-outline-dark" style="min-width: 80px;">EU 45.5</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-dark w-100 py-3 rounded-pill mb-3 fw-semibold">
+                    Ajouter au panier
+                </button>
+
+                <button class="btn btn-outline-dark w-100 py-3 rounded-pill mb-4">
+                    Ajouter aux favoris ♡
+                </button>
+
+                <div class="mb-4">
+                    <p>{{ product.description }}</p>
+                </div>
+
+                <div class="border-top pt-3">
+                    <p class="mb-2"><strong>Retrait gratuit</strong></p>
+                    <p class="text-muted small">Trouvez un magasin près de chez vous</p>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{{ path('app_home') }}" class="btn btn-link text-dark text-decoration-none">
+                        ← Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

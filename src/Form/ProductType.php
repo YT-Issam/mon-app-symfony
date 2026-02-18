@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Product;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -21,6 +23,13 @@ class ProductType extends AbstractType
             ->add('title', TextType::class)
             ->add('description', TextareaType::class)
             ->add('price', MoneyType::class)
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'title',
+                'placeholder' => 'Choisir une catégorie',
+                'required' => true,
+            ])
+
             ->add('imageFile', FileType::class, [
                 'label' => 'Image du produit',
                 'mapped' => false,
@@ -37,6 +46,7 @@ class ProductType extends AbstractType
                     ])
                 ],
             ])
+
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer'
             ])
@@ -50,4 +60,3 @@ class ProductType extends AbstractType
         ]);
     }
 }
-

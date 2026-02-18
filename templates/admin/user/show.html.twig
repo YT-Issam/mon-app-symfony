@@ -1,0 +1,11 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}Page show{% endblock %}
+
+{% block body %}
+    <div>
+        <p>{{ user.id }}</p>
+        <p>{{ user.username }}</p>
+        <p>{{ user.email }}</p>
+    </div>
+{% endblock %}

@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AppController extends AbstractController
 {
-
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function home(ProductRepository $productRepository): Response
     {
@@ -18,12 +17,18 @@ class AppController extends AbstractController
             'products' => $productRepository->findAll()
         ]);
     }
-    #[Route('/product/{id}', name: 'product_show', methods: ['GET'])]
-    public function show(Product $product): Response
+
+    #[Route('/admin/dashboard', name: 'app_admin_dashboard', methods: ['GET'])]
+    public function admin(): Response
     {
-        return $this->render('product/product_show.html.twig', [
-            'product' => $product,
-        ]);
+        return $this->render('admin/dashboard.html.twig');
     }
 
+    #[Route('/product/{id}', name: 'app_public_product_show', methods: ['GET'])]
+    public function showProducts(Product $product): Response
+    {
+        return $this->render('product/show.html.twig', [
+            'product' => $product
+        ]);
+    }
 }

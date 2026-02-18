@@ -56,9 +56,10 @@ class Category
     #[ORM\PrePersist]
     public function onCreatedAt(): static
     {
-        $this->createdAt = new \DateTime('now');
+        $this->createdAt = new \DateTime("now");
         return $this;
     }
+
     public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
@@ -74,9 +75,10 @@ class Category
     #[ORM\PreUpdate]
     public function onUpdatedAt(): static
     {
-        $this->updatedAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime("now");
         return $this;
     }
+
     public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
@@ -119,3 +121,4 @@ class Category
         return $this;
     }
 }
+

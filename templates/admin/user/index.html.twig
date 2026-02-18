@@ -1,0 +1,39 @@
+{% extends 'admin/base-admin.html.twig' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+
+{% block body %}
+    <h1>{{ title }}</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <th>{{ user.id }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <a class="btn btn-warning" href="{{ path('app_user_show', {'id': user.id}) }}">Show</a>
+
+                    <a class="btn btn-secondary" href="{{ path('app_user_edit', {'id': user.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}
+

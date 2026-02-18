@@ -1,5 +1,7 @@
 USE app;
 
+ALTER TABLE user ADD COLUMN email VARCHAR(255) NOT NULL AFTER username;
+
 INSERT INTO user (username, email, password)
 VALUES ('M2i', 'm2i@gmail.com', '$2y$10$2CTv2LcrLK42K5eKezQDDu0bwhufFYVPCMwsPa/cAI/8wY5JaZLeK'),
        ('Killer60', 'killer@gmail.com', '$2y$10$2CTv2LcrLK42K5eKezQDDu0bwhufFYVPCMwsPa/cAI/8wY5JaZLeK'),
