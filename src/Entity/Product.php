@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -16,15 +17,21 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageFilename = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\NotNull]
     private ?float $price = null;
 
     #[ORM\Column(nullable: true)]
@@ -34,14 +41,24 @@ class Product
     private ?\DateTime $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
+    #[Assert\NotNull]
     private ?Category $category = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imageFilename = null;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(?string $imageFilename): static
+    {
+        $this->imageFilename = $imageFilename;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -99,12 +116,14 @@ class Product
 
         return $this;
     }
+
     #[ORM\PrePersist]
     public function onCreatedAt(): static
     {
-        $this->createdAt = new \DateTime('now');
+        $this->createdAt = new \DateTime("now");
         return $this;
     }
+
     public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
@@ -120,7 +139,7 @@ class Product
     #[ORM\PreUpdate]
     public function onUpdatedAt(): static
     {
-        $this->updatedAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime("now");
         return $this;
     }
 
@@ -147,17 +166,4 @@ class Product
 
         return $this;
     }
-
-    public function getImageFilename(): ?string
-    {
-        return $this->imageFilename;
-    }
-
-    public function setImageFilename(?string $imageFilename): static
-    {
-        $this->imageFilename = $imageFilename;
-
-        return $this;
-    }
 }
-

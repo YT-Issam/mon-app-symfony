@@ -2,29 +2,19 @@
 
 namespace App\Tests\Repository;
 
-use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CategoryRepositoryTest extends KernelTestCase
+class ProductRepositoryTest extends KernelTestCase
 {
-    public function testFindAllCategory(): void
+    public function testFindPaginate(): void
     {
         self::bootKernel();
+        $container = self::getContainer();
 
-        // (2) use static::getContainer() to access the service container
-        $container = static::getContainer();
+        $productRepository = $container->get(ProductRepository::class);
+        $data = $productRepository->findPaginate();
 
-        $categories = count($container->get(CategoryRepository::class)->findAll());
-        $this->assertEquals(6, $categories);
-    }
-
-    public function testFindOneByTitleCategory(): void
-    {
-        self::bootKernel();
-        $container = static::getContainer();
-
-        $category[] = $container->get(CategoryRepository::class)->findOneBy(['title' => 'shoes']);
-        $this->assertEquals(1,count($category));
+        $this->assertEquals(10, count($data['products']));
     }
 }
-

@@ -16,13 +16,16 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UserController extends AbstractController
 {
     #[Route(name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(Request $request, UserRepository $userRepository): Response
     {
-        $users = $userRepository->findAll();
+        $size = isset($request->query->all()['size']) ? (int)$request->query->get('size') : 10;
+        $page = isset($request->query->all()['page']) ? (int)$request->query->get('page') : 1;
 
-        return $this->render('user/index.html.twig', [
-            'title' => "Liste des utilisateurs!",
-            'users' => $users,
+        $data = $userRepository->findPaginate($size, $page);
+
+        return $this->render('admin/user/index.html.twig', [
+            'users' => $data['users'],
+            'count' => $data['count']
         ]);
     }
 
@@ -30,7 +33,6 @@ final class UserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
-
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
@@ -43,7 +45,6 @@ final class UserController extends AbstractController
             $user->setPassword($hashedPassword);
 
             $roleValue = $form->get('role')->getData();
-
             $user->setRoles(!$roleValue ? [$roleValue] : []);
 
             $entityManager->persist($user);
@@ -52,16 +53,16 @@ final class UserController extends AbstractController
             return $this->redirectToRoute('app_user_index');
         }
 
-        return $this->render('user/new.html.twig', [
-            'form' => $form
+        return $this->render('admin/user/new.html.twig', [
+            'form' => $form,
         ]);
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
+        return $this->render('admin/user/show.html.twig', [
+            'user' => $user
         ]);
     }
 
@@ -83,7 +84,7 @@ final class UserController extends AbstractController
             return $this->redirectToRoute('app_user_index');
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('admin/user/edit.html.twig', [
             'form' => $form,
             'user' => $user
         ]);
@@ -100,4 +101,3 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 }
-

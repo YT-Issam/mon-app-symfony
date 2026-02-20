@@ -6,8 +6,8 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +18,16 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(Request $request, ProductRepository $productRepository): Response
     {
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+        $size = isset($request->query->all()['size']) ? (int)$request->query->get('size') : 10;
+        $page = isset($request->query->all()['page']) ? (int)$request->query->get('page') : 1;
+
+        $data = $productRepository->findPaginate($size, $page);
+
+        return $this->render('admin/product/index.html.twig', [
+            'products' => $data['products'],
+            'count' => $data['count']
         ]);
     }
 
@@ -57,7 +63,7 @@ final class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('product/new.html.twig', [
+        return $this->render('admin/product/new.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);
@@ -66,7 +72,7 @@ final class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
-        return $this->render('product/show.html.twig', [
+        return $this->render('admin/product/show.html.twig', [
             'product' => $product,
         ]);
     }
@@ -110,7 +116,7 @@ final class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('product/edit.html.twig', [
+        return $this->render('admin/product/edit.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);
@@ -120,7 +126,6 @@ final class ProductController extends AbstractController
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->getPayload()->getString('_token'))) {
-
             if ($product->getImageFilename()) {
                 $oldImagePath = $this->getParameter('kernel.project_dir') . '/public/uploads/products/' . $product->getImageFilename();
                 if (file_exists($oldImagePath)) {
@@ -135,4 +140,3 @@ final class ProductController extends AbstractController
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
 }
-

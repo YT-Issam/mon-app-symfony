@@ -258,6 +258,8 @@
       <excludeFolder url="file://$MODULE_DIR$/mon-app-symfony/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/mon-app-symfony/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/mon-app-symfony/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/public/build" />
+      <excludeFolder url="file://$MODULE_DIR$/var" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

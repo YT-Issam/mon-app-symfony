@@ -16,6 +16,28 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function findPaginate(?int $size = 10, ?int $page = 1 ): array
+    {
+        $offset = ($page - 1) * $size;
+
+        $count = $this->createQueryBuilder('p')
+            ->select('COUNT(p)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $products = $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($size)
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'products' => $products,
+            'count' => $count
+        ];
+    }
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */
@@ -41,3 +63,4 @@ class ProductRepository extends ServiceEntityRepository
     //        ;
     //    }
 }
+

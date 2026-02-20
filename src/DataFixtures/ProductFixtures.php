@@ -12,44 +12,38 @@ use Smknstd\FakerPicsumImages\FakerPicsumImagesProvider;
 
 class ProductFixtures extends Fixture implements DependentFixtureInterface
 {
+
     public function load(ObjectManager $manager): void
     {
         $faker = Faker\Factory::create('fr_FR');
         $faker->addProvider(new FakerPicsumImagesProvider($faker));
 
-        $command = 'rm -rf ' . dirname(__DIR__) . '/../public/uploads/products';
-
         $destDir = dirname(__DIR__) . '/../public/uploads/products';
+
         if (!is_dir($destDir)) {
-
             mkdir($destDir, 0775, true);
-
         } else {
-
-            exec($command);
+            exec('rm -rf ' . $destDir);
             mkdir($destDir, 0775, true);
-
         }
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $product = new Product();
 
-            $filePath = $faker->image(dir: '/tmp', width: 320, height: 240);
+            $filePath = $faker->image(dir: '/tmp');
 
             if ($filePath) {
                 $ext = pathinfo($filePath, PATHINFO_EXTENSION);
-                $filename = $faker->uuid() . '.' . $ext;
+                $filename = uniqid('products_', true) . '.' . $ext;
 
                 copy($filePath, $destDir . '/' . $filename);
-
                 $product->setImageFilename($filename);
             }
 
             $product->setTitle($faker->words(3, true))
-                ->setPrice($faker->numberBetween($min = 50, $max = 300))
-                ->setDescription($faker->realText($maxNbChars = 200, $indexSize = 2))
-                ->setCategory($this->getReference('category-' . rand(0, 5), Category::class))
-            ;
+                ->setPrice($faker->numberBetween(50, 300))
+                ->setDescription($faker->realText(rand(100, 200)))
+                ->setCategory($this->getReference('category-' . rand(0, 5), Category::class));
 
             $manager->persist($product);
         }
@@ -60,8 +54,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            CategoryFixtures::class,
+            CategoryFixtures::class
         ];
     }
 }
-

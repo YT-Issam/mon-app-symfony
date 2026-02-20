@@ -25,8 +25,8 @@ class UserFixtures extends Fixture
             $userAdmin = new User();
             $password = $this->hasher->hashPassword($userAdmin, 'password');
 
-            $userAdmin->setUsername($faker->name)
-                ->setEmail('admin' . $i . '@gmail.com')
+            $userAdmin->setUsername($faker->name())
+                ->setEmail($faker->unique()->email())
                 ->setPassword($password)
                 ->setRoles(['ROLE_ADMIN']);
 
@@ -37,8 +37,8 @@ class UserFixtures extends Fixture
             $user = new User();
             $password = $this->hasher->hashPassword($user, 'password');
 
-            $user->setUsername($faker->name)
-                ->setEmail($faker->email)
+            $user->setUsername($faker->name())
+                ->setEmail($faker->unique()->email())
                 ->setPassword($password);
 
             $manager->persist($user);
@@ -47,5 +47,3 @@ class UserFixtures extends Fixture
         $manager->flush();
     }
 }
-
-
